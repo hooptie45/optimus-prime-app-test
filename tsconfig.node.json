@@ -5,7 +5,9 @@
     "module": "ESNext",
     "moduleResolution": "bundler",
     "allowSyntheticDefaultImports": true,
-    "strict": true
+    "strict": true,
+    "jsx": "react-jsx",
+    "types": ["@aws-amplify/ui-react", "jest"]
   },
-  "include": ["vite.config.ts"]
+  "include": ["vite.config.ts", "src/**/*.tsx", "amplify/**/*.ts", "src/components/TodoItem/index.ts"]
 }
