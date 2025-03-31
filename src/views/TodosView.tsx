@@ -39,6 +39,7 @@ export const TodosView: React.FC = () => {
   }
 
   async function deleteTodo(id: string) {
+    
     await client.models.Todo.delete({ id });
   }
 

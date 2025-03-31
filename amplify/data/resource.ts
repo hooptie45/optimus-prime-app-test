@@ -20,7 +20,7 @@ const schema = a.schema({
   }),
   ApiKey: a.model({
     key: a.string().required(),
-    type: a.string().default("SAM").required(),
+    apiType: a.string().default("SAM").required(),
     limit: a.integer().default(1000).required(),
     used: a.integer().default(0).required(),
   }),

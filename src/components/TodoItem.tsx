@@ -71,7 +71,7 @@ export function TodoItem({ todo, onDelete, onEdit }: {
               <Button
                 variation="link"
                 size="small"
-                onClick={handleDelete}
+                onClick={() => handleDelete()}
                 data-testid={`todo-delete-confirm-${todo.id}`}
                 color={tokens.colors.font.error}
               >
