@@ -1,5 +1,3 @@
-import { transform } from "esbuild";
-
 export default {
   preset: 'ts-jest',
   testEnvironment: 'jsdom',
