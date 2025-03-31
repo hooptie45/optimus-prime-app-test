@@ -2,8 +2,8 @@ import React, { useState, useEffect, KeyboardEvent } from "react";
 import { Button, Card, Collection, Flex, Heading, Text, TextField, Divider, useTheme } from "@aws-amplify/ui-react";
 import { Modal } from "../components/Modal";
 import { TodoItem } from "../components/TodoItem";
-import type { Schema } from "../../amplify/data/resource";
 import { generateClient } from "aws-amplify/data";
+import type { Schema } from "../../amplify/data/resource";
 
 const client = generateClient<Schema>();
 
@@ -150,7 +150,7 @@ export const TodosView: React.FC = () => {
           </Text>
           <Flex gap={tokens.space.small} justifyContent="flex-end">
             <Button
-              variation="" // Changed from "quiet" to "secondary"
+              variation="secondary" // Changed from "quiet" to "secondary"
               onClick={() => setShowModal(false)}
               data-testid="new-todo-cancel"
             >
