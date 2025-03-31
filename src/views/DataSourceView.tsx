@@ -7,7 +7,11 @@ const client = generateClient<Schema>();
 
 export const DataSourceView: React.FC = () => {
   const [dataSources, setDataSources] = useState<Array<Schema["DataSource"]["type"]>>([]);
-  const [newDataSource, setNewDataSource] = useState({ name: "", url: "" });
+  const [newDataSource, setNewDataSource] = useState({ 
+    name: "", 
+    url: "", 
+    apiType: ""
+   });
   const { tokens } = useTheme();
 
   useEffect(() => {
@@ -21,9 +25,19 @@ export const DataSourceView: React.FC = () => {
 
   const handleAddDataSource = async () => {
     if (newDataSource.name && newDataSource.url) {
-      const result = await client.models.DataSource.create(newDataSource);
-      setDataSources((prev) => [...prev, result.data]);
-      setNewDataSource({ name: "", url: "" });
+      try {
+        const result = await client.models.DataSource.create(newDataSource);
+        if (result && result.data) {
+          setDataSources((prev) => [...prev, result.data as Schema["DataSource"]["type"]]);
+          setNewDataSource({ name: "", url: "", apiType: "" });
+        } else {
+          console.error("Failed to create data source: Invalid response", result);
+        }
+      } catch (error) {
+        console.error("Failed to create data source:", error);
+      }
+    } else {
+      console.warn("Name and URL are required to create a data source.");
     }
   };
 
@@ -32,7 +46,7 @@ export const DataSourceView: React.FC = () => {
       <Heading level={1} marginBottom={tokens.space.medium}>
         Data Sources
       </Heading>
-      <Flex direction="column" gap={tokens.space.small} marginBottom={tokens.space.medium}>
+      <Flex direction="row" gap={tokens.space.small} marginBottom={tokens.space.medium}>
         <TextField
           label="Name"
           value={newDataSource.name}
@@ -43,10 +57,17 @@ export const DataSourceView: React.FC = () => {
           value={newDataSource.url}
           onChange={(e) => setNewDataSource({ ...newDataSource, url: e.target.value })}
         />
-        <Button onClick={handleAddDataSource} variation="primary">
+        <TextField
+          label="API Type"
+          value={newDataSource.apiType}
+          onChange={(e) => setNewDataSource({ ...newDataSource, apiType: e.target.value })}
+        />
+        
+      </Flex>
+              
+      <Button onClick={handleAddDataSource} variation="primary">
           Add Data Source
         </Button>
-      </Flex>
       <Collection
         type="list"
         items={dataSources}
@@ -54,13 +75,21 @@ export const DataSourceView: React.FC = () => {
         direction="column"
         data-testid="data-source-list"
       >
-        {(dataSource) => (
-          <Card key={dataSource.id} padding={tokens.space.medium}>
-            <Text fontWeight="bold">{dataSource.name}</Text>
-            <Text>{dataSource.url}</Text>
-          </Card>
-        )}
+        {(dataSource) => {
+          return (
+            <Card key={dataSource.id} padding={tokens.space.medium}>
+              <Text fontWeight="bold">{dataSource.name}</Text>
+              <Text>{dataSource.url}</Text>
+              <Text>{dataSource.slug}</Text>
+              {newFunction(dataSource)}
+            </Card>
+          )
+        }}
       </Collection>
     </Card>
   );
 };
+
+function newFunction(dataSource) {
+  return <pre>{JSON.stringify(dataSource, null, 2)}</pre>;
+}

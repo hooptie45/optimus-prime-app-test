@@ -22,6 +22,9 @@ export const Navbar: React.FC<{ userPersona: string; onSignOut: () => void }> = 
         <Link to="/datasource" style={{ textDecoration: "none", color: tokens.colors.font.primary }}>
           <Text>DataSource</Text>
         </Link>
+        <Link to="/apikeys" style={{ textDecoration: "none", color: tokens.colors.font.primary }}>
+          <Text>API Keys</Text>
+        </Link>
       </Flex>
       <Flex alignItems="center" gap={tokens.space.medium}>
         <Text>{userPersona || "Guest"}</Text>
