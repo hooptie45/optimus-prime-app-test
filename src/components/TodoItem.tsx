@@ -1,6 +1,5 @@
-import React from "react";
+import React, { useState, KeyboardEvent } from "react";
 import { useTheme, Card, Flex, TextField, Text, Button } from "@aws-amplify/ui-react";
-import { useState, KeyboardEvent } from "react";
 import type { Schema } from "../../amplify/data/resource";
 
 export function TodoItem({ todo, onDelete, onEdit }: {
@@ -14,7 +13,7 @@ export function TodoItem({ todo, onDelete, onEdit }: {
   const { tokens } = useTheme();
 
   const handleSubmitEdit = async () => {
-    if (editContent.trim() !== '' && editContent !== todo.content) {
+    if (editContent.trim() && editContent !== todo.content) {
       await onEdit(todo.id, editContent);
     }
     setIsEditing(false);
@@ -29,6 +28,8 @@ export function TodoItem({ todo, onDelete, onEdit }: {
       setEditContent(todo.content || '');
     }
   };
+
+  const handleDelete = () => onDelete(todo.id);
 
   return (
     <Card
@@ -47,12 +48,13 @@ export function TodoItem({ todo, onDelete, onEdit }: {
             onBlur={handleSubmitEdit}
             autoFocus
             size="small"
-            data-testid={`todo-edit-input-${todo.id}`} />
+            data-testid={`todo-edit-input-${todo.id}`}
+          />
         ) : (
           <Text
             flex="1"
             color={tokens.colors.font.primary}
-            textDecoration={'none'}
+            textDecoration="none"
             onClick={() => {
               setIsEditing(true);
               setEditContent(todo.content || '');
@@ -69,7 +71,7 @@ export function TodoItem({ todo, onDelete, onEdit }: {
               <Button
                 variation="link"
                 size="small"
-                onClick={() => onDelete(todo.id)}
+                onClick={handleDelete}
                 data-testid={`todo-delete-confirm-${todo.id}`}
                 color={tokens.colors.font.error}
               >
@@ -84,7 +86,7 @@ export function TodoItem({ todo, onDelete, onEdit }: {
                 Cancel
               </Button>
             </>
-          ) : !isEditing && (
+          ) : (
             <Button
               variation="link"
               size="small"

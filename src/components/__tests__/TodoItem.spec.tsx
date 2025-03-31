@@ -2,7 +2,7 @@
  * @jest-environment jsdom
  */
 import { render, screen, fireEvent } from "@testing-library/react";
-import "@testing-library/jest-dom"; // Add this import for jest-dom matchers
+import "@testing-library/jest-dom";
 import { TodoItem } from "../TodoItem";
 import React from "react";
 
@@ -11,7 +11,6 @@ const mockTodo = {
   content: "Test Todo",
   createdAt: new Date().toISOString(),
   updatedAt: new Date().toISOString(),
-  isComplete: false,
 };
 
 const mockOnDelete = jest.fn();
@@ -20,30 +19,20 @@ const mockOnEdit = jest.fn();
 describe("TodoItem", () => {
   beforeEach(() => {
     jest.clearAllMocks();
-  });
-
-  it("renders the todo content", () => {
-    render(
-      <TodoItem
-        todo={mockTodo}
-        onDelete={mockOnDelete}
-        onEdit={mockOnEdit}      
-      />
-    );
-
-    expect(screen.getByTestId(`todo-content-${mockTodo.id}`)).toHaveTextContent(mockTodo.content);
-  });
-
-  it("allows editing the todo content", async () => {
     render(
       <TodoItem
         todo={mockTodo}
         onDelete={mockOnDelete}
         onEdit={mockOnEdit}
-    
       />
     );
+  });
 
+  it("renders the todo content", () => {
+    expect(screen.getByTestId(`todo-content-${mockTodo.id}`)).toHaveTextContent(mockTodo.content);
+  });
+
+  it("allows editing the todo content", () => {
     fireEvent.click(screen.getByTestId(`todo-content-${mockTodo.id}`));
     const input = screen.getByTestId(`todo-edit-input-${mockTodo.id}`);
     fireEvent.change(input, { target: { value: "Updated Todo" } });
@@ -53,14 +42,6 @@ describe("TodoItem", () => {
   });
 
   it("cancels editing on Escape key press", () => {
-    render(
-      <TodoItem
-        todo={mockTodo}
-        onDelete={mockOnDelete}
-        onEdit={mockOnEdit}
-      />
-    );
-
     fireEvent.click(screen.getByTestId(`todo-content-${mockTodo.id}`));
     const input = screen.getByTestId(`todo-edit-input-${mockTodo.id}`);
     fireEvent.change(input, { target: { value: "Updated Todo" } });
@@ -70,14 +51,6 @@ describe("TodoItem", () => {
   });
 
   it("shows delete confirmation and deletes the todo", () => {
-    render(
-      <TodoItem
-        todo={mockTodo}
-        onDelete={mockOnDelete}
-        onEdit={mockOnEdit}
-      />
-    );
-
     fireEvent.click(screen.getByTestId(`todo-delete-${mockTodo.id}`));
     fireEvent.click(screen.getByTestId(`todo-delete-confirm-${mockTodo.id}`));
 
@@ -85,14 +58,6 @@ describe("TodoItem", () => {
   });
 
   it("cancels delete confirmation", () => {
-    render(
-      <TodoItem
-        todo={mockTodo}
-        onDelete={mockOnDelete}
-        onEdit={mockOnEdit}
-      />
-    );
-
     fireEvent.click(screen.getByTestId(`todo-delete-${mockTodo.id}`));
     fireEvent.click(screen.getByTestId(`todo-delete-cancel-${mockTodo.id}`));
 
