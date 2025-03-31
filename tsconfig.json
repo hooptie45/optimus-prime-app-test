@@ -20,6 +20,7 @@
     "noFallthroughCasesInSwitch": true,
     "types": ["@aws-amplify/ui-react", "jest"]
   },
-  "include": ["src/**/*.ts", "**/*.tsx", "amplify/**/*.ts"],
+  "include": ["src/**/!(*.d).ts", "src/**/!(*.spec).tsx"],
+  "exclude": ["src/**/*.spec.tsx", "src/**/*.d.ts", "amplify/**/*.ts", "amplify/**/*.d.ts"],
   "references": [{ "path": "./tsconfig.node.json" }]
 }
